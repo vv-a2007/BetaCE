@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container id="app">
     <b-navbar toggleable="sm" tooglebreakpoint="sm" type="dark" variant="primary">
 
       <b-navbar-toggle target="sm"></b-navbar-toggle>
@@ -21,6 +21,11 @@
             <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
           </b-nav-form>
 
+          <b-nav-form>
+          <login-modal></login-modal>
+          <b-nav-item to="/registration">Registration</b-nav-item>
+          </b-nav-form>
+
           <b-nav-item-dropdown text="Lang" right>
             <b-dropdown-item href="#">EN</b-dropdown-item>
             <b-dropdown-item href="#">RU</b-dropdown-item>
@@ -39,17 +44,26 @@
       </b-collapse>
     </b-navbar>
     <router-view/>
-  </div>
+  </b-container>
 </template>
 
 <script>
 
+import loginPage from '../src/components/Auth/Login.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+    data ()
+    {
+        return {
+
+        }
+    },
+    components:{'login-modal':loginPage}
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
