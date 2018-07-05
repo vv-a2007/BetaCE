@@ -22,8 +22,8 @@
           </b-nav-form>
 
           <b-nav-form>
-          <login-modal></login-modal>
-          <b-nav-item to="/registration">Registration</b-nav-item>
+            <login-modal></login-modal>
+            <registration-modal></registration-modal>
           </b-nav-form>
 
           <b-nav-item-dropdown text="Lang" right>
@@ -50,16 +50,21 @@
 <script>
 
 import loginPage from '../src/components/Auth/Login.vue'
+import regPage from '../src/components/Auth/Registration.vue'
 
 export default {
   name: 'App',
     data ()
     {
         return {
+            user:[
 
+            ]
         }
     },
-    components:{'login-modal':loginPage}
+    components:{'login-modal':loginPage,
+                'registration-modal':regPage
+               }
 }
 </script>
 

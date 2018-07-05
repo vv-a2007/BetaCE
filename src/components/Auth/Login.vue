@@ -10,7 +10,9 @@
              @ok="handleOk"
              @shown="clearName"
              centered
-             ok-only>
+             ok-only
+             :ok-disabled="this.$v.$invalid"
+             >
         <form @submit.stop.prevent="handleSubmit">
             <b-row>
                 <b-form-input type="text"
@@ -18,18 +20,20 @@
                           v-model="e_mail"
                           style="width: 90%"
                           class="my-2 ml-4"
+                          autocomplete="section-blue username"
                           >
                 </b-form-input>
                 <div class="error ml-4 " v-if="!$v.e_mail.required">e-mail is required.</div>
                 <div class="error ml-4 " v-if="!$v.e_mail.email">e-mail must be a valid.</div>
             </b-row>
             <b-row>
-                <b-form-input type="text"
+                <b-form-input type="password"
                           placeholder="Enter your password"
                           v-model="passw"
                           style="width: 90%"
                           class="my-2 ml-4"
                           v-model.trim="$v.passw.$model"
+                          autocomplete="section-blue current-password"
                           >
                 </b-form-input>
                 <div class="error ml-4 " v-if="!$v.passw.required">Password is required.</div>
@@ -63,6 +67,7 @@
             }
         },
         methods: {
+
             clearName () {
                 this.e_mail = '';
                 this.passw = ''
@@ -70,10 +75,7 @@
             handleOk (evt) {
                 // Prevent modal from closing
                 evt.preventDefault();
-
-                if (!this.e_mail) {
-
-                } else {
+                if (!this.$v.$invalid) {
                     this.handleSubmit()
                 }
             },
