@@ -111,8 +111,8 @@
             addUser :  function (user) {
 
                           this.$store.dispatch('registerUser',user)
-                              .then (() => {this.$refs.modal.hide(); this.$router.push('/')})
-                              .catch((error) => {this.$refs.modal.hide(); return error})
+                              .then (() => { this.$router.push('/')})
+                              .catch((error) => {return error})
 
             },
             handleOk (evt) {

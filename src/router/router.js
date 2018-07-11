@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Vuelidate from 'vuelidate'
-
+import AuthGuard from './auth-guard'
 import homePage from '../components/Home.vue'
 import shoppingPage from '../components/Shopping.vue'
 import loginPage from '../components/Auth/Login.vue'
@@ -21,7 +21,8 @@ export default new VueRouter ({
 
         {
             path:'/shopping',
-            component: shoppingPage
+            component: shoppingPage,
+            beforeEnter: AuthGuard
         },
 
 

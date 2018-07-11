@@ -4,13 +4,11 @@
         <b-btn v-b-modal.loginModal size="sm" class="my-2 my-sm-0" variant="primary"  >Login</b-btn>
         </b-nav-item>
         <!-- Modal Component -->
-    <b-modal
-             id="loginModal"
+    <b-modal id="loginModal"
              ref="modal"
              title="Login with e-mail"
              @ok="handleOk"
              @shown="clearName"
-             @change="true"
              centered
              ok-only
              :ok-disabled="this.$v.$invalid"
@@ -98,7 +96,7 @@
                 };
                 this.$store.dispatch('loginUser',user)
                     .then (() => {this.$refs.modal.hide(); this.$router.push('/')})
-                    .catch((error) => {this.$refs.modal.hide(); return error})
+                    .catch((error) => {return error})
             }
         }
     }

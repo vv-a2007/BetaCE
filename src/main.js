@@ -37,6 +37,14 @@ new Vue({
             projectId: "betace-bfeb6",
             storageBucket: "betace-bfeb6.appspot.com",
             messagingSenderId: "24362690064"});
+
+        fb.auth().onAuthStateChanged(user => {
+            if (user){
+                this.$store.dispatch('autoLoginUser',user)
+            }
+        })
+
     }
+
 });
 

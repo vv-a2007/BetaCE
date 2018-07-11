@@ -13,28 +13,37 @@
         </b-navbar-nav>
 
         <b-navbar-nav v-for="item in leftLinks" :key="item.title">
-          <b-nav-item :to="item.link"><b-btn  size="sm" class="my-2 my-sm-0" variant="primary">{{item.title}}</b-btn></b-nav-item>
+          <b-nav-item v-if="(!item.checkLog) || (item.checkLog && isUserLogin)" :to="item.link"><b-btn  size="sm" class="my-2 my-sm-0" variant="primary">{{item.title}}</b-btn></b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
           <b-navbar-nav v-for="item in rightLinks" :key="item.title">
-            <b-nav-item :to="item.link"><b-btn  size="sm" class="my-2 my-sm-0" variant="primary">{{item.title}}</b-btn></b-nav-item>
+            <b-nav-item v-if="(!item.checkLog) || (item.checkLog && isUserLogin)" :to="item.link"><b-btn  size="sm" class="my-2 my-sm-0" variant="primary">{{item.title}}</b-btn></b-nav-item>
           </b-navbar-nav>
 
           <b-nav-form>
-            <login-modal></login-modal>
-            <registration-modal></registration-modal>
+            <login-modal v-if="!isUserLogin"></login-modal>
+            <registration-modal v-if="!isUserLogin" ></registration-modal>
           </b-nav-form>
 
           <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" type="dark" >
 
-          <b-nav-item-dropdown text="User" right variant="primary" type="dark">
+          <b-nav-item-dropdown v-if="isUserLogin" text="User" right variant="primary" type="dark">
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#" >Signout</b-dropdown-item>
           </b-nav-item-dropdown>
           </b-btn>
+
+          <b-navbar-nav v-if="isUserLogin" >
+           <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" @click="logOut">LogOut</b-btn>
+          </b-navbar-nav>
+
+          <b-nav-form v-if="isUserLogin" >
+            <b-form-input size="sm" class="my-sm-0" type="text" placeholder="Search"></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+          </b-nav-form>
 
           <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" type="dark" >
           <b-nav-item-dropdown text="Lang" right>
@@ -43,10 +52,7 @@
           </b-nav-item-dropdown>
           </b-btn>
 
-          <b-nav-form>
-            <b-form-input size="sm" class="my-sm-0" type="text" placeholder="Search"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-          </b-nav-form>
+
 
 
         </b-navbar-nav>
@@ -81,7 +87,7 @@ export default {
     {
         return {
             leftLinks :[
-                {title:'Shopping', link:'/shopping'}
+                {title:'Shopping', link:'/shopping', checkLog:true}
             ],
             rightLinks :[
 
@@ -96,12 +102,18 @@ export default {
 
             error () { if (this.$store.getters.error) {
                            return this.$store.getters.error}
-                       else { return null}}
+                       else { return null}},
+
+            isUserLogin () {return this.$store.getters.isUserLogin}
     },
 
     methods: {
         closeError(){
             this.$store.dispatch('clearError')
+        },
+        logOut (){
+            this.$store.dispatch('logOutUser');
+            this.$router.push('/')
         }
     },
     components:{'login-modal':loginPage,
