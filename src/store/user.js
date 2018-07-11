@@ -1,9 +1,11 @@
+import * as fb from 'firebase'
+
+
 class User {
     constructor(id){
         this.id=id
     }
 }
-
 
 export default {
     state:{
@@ -11,15 +13,41 @@ export default {
     },
     mutations:{
         setUser (state, payload) {
-            state.user=payload
+            state.user = payload
         }
     },
     actions:{
-        registerUser({commit},{email,passw}){
-
+        async registerUser({commit},{email,passw}){
+          commit('clearError');
+          commit('setLoading',true);
+          try {
+          const user = await fb.auth().createUserWithEmailAndPassword(email,passw)
+                  commit('setUser', new User(user.uid));
+                  commit('setLoading',false);
+              }
+          catch(error) {
+                  commit('setLoading',false);
+                  commit('setError', error.message);
+                  throw error
+                }
+        },
+        async loginUser({commit},{email,passw}){
+            commit('clearError');
+            commit('setLoading',true);
+            try {
+                const user = await fb.auth().signInWithEmailAndPassword(email,passw)
+                commit('setUser', new User(user.uid));
+                commit('setLoading',false);
+            }
+            catch(error) {
+                commit('setLoading',false);
+                commit('setError', error.message);
+                throw error
+            }
         }
     },
     getters:{
-        user(state){return state.user}
+        user(state){return state.user},
+        isUserLogin (state) { return state.user !== null}
     }
 }

@@ -11,10 +11,12 @@
                  @shown="clearName"
                  centered
                  ok-only
-                 :ok-disabled="this.$v.$invalid"
         >
-            <form @submit.stop.prevent="handleSubmit">
-                <div class="error ml-4 " v-if="!this.mes!==''">{{mes}}</div>
+        <template slot="modal-ok"
+                  :loading="loading"
+                  :disabled="this.$v.$invalid || loading"
+                  >Submit</template>
+            <form v-if="!regOk" @submit.stop.prevent="handleSubmit">
                 <b-row>
                     <b-form-input type="text"
                                   placeholder="Enter your e-mail"
@@ -26,7 +28,6 @@
                     </b-form-input>
                     <div class="error ml-4 " v-if="!$v.e_mail.required">e-mail is required.</div>
                     <div class="error ml-4 " v-if="!$v.e_mail.email">e-mail must be a valid.</div>
-                    <div class="error ml-4 " v-if="!$v.e_mail.uniqueEmail">This e-mail already exist.</div>
                 </b-row>
                 <b-row>
                     <b-form-input type="password"
@@ -55,6 +56,12 @@
 
                 </b-row>
             </form>
+            <form v-if="regOk" @submit.stop.prevent="closeSubmit">
+                <div class="primary ml-4 ">User with login</div>
+                <div class="success ml-4 " >{{e_mail}}</div>
+                <div class="primary ml-4 ">{{textOK}}</div>
+                <b-button size="md" class="my-2 my-sm-0" type="submit" @submit="closeSubmit">Close</b-button>
+            </form>
         </b-modal>
     </div>
 </template>
@@ -70,36 +77,43 @@
                 e_mail: '',
                 passw: '',
                 repeatpassw:'',
-                mes:''
+                regOk:false,
+                textOK:''
             }
+        },
+        computed : {
+           loading () {
+               return this.$store.getters.loading
+           }
         },
         validations: {
-            e_mail: {
-                required,
-                email,
-                uniqueEmail : function (newEmail) {
-                    if (newEmail === '' || !this.$v.e_mail.required || !this.$v.e_mail.email ) return true;
-                    return new Promise((resolve, reject) => {
-                    this.$http.get("http://betace.my/Check_new_email.php",{params:{'email':newEmail}},{responseType: 'json'}).then(response => {
-                         return (response.json() === true); // success callback
-                    }, reject => {
-                        this.mes = response.json(); return false // error callback
-                    });})
+                e_mail: {
+                    required,
+                    email
+                },
+                passw: {
+                    required,
+                    minLength: minLength(8)
+                },
+                repeatpassw: {
+                    sameAs: sameAs('passw')
                 }
-            },
-            passw: {
-                required,
-                minLength: minLength(8)
-            },
-            repeatpassw: {
-                sameAs :sameAs('passw')
             }
-        },
+        ,
         methods: {
 
             clearName () {
                 this.e_mail = '';
-                this.passw = ''
+                this.passw = '';
+                this.repeatpassw=''
+            },
+
+            addUser :  function (user) {
+
+                          this.$store.dispatch('registerUser',user)
+                              .then (() => {this.$refs.modal.hide(); this.$router.push('/')})
+                              .catch((error) => {this.$refs.modal.hide(); return error})
+
             },
             handleOk (evt) {
                 // Prevent modal from closing
@@ -109,9 +123,15 @@
                 }
             },
             handleSubmit () {
-
+                const user = {
+                    email:this.e_mail,
+                    passw:this.passw
+                };
+                this.addUser(user);
+            },
+            closeSubmit (){
                 this.clearName();
-                this.$refs.modal.hide()
+                this.$refs.modal.hide();
             }
         }
     }

@@ -11,17 +11,15 @@ if (!headers_sent()) {
 }
 $mysqli = new mysqli("localhost:3306", "vladimiranokhin", "vladimir2071654", "SiteCollection");
 
-$email_check = [];
+$answer=[];
 
-print_r($_GET['email']);
-
-$query = "SELECT * FROM users WHERE email='".$_GET['email']."';";
+$query = "INSERT INTO users  SET email='".$_POST['email']."', passw='".$_POST['passw']."';";
 $res = $mysqli->query($query);
 
 if ($res!==false){
-    $email_check['check'] = 0;
+    $email_check['id'] = mysqli_insert_id($mysqli);;
 } else {
-    $email_check['check'] = 1;
+    $email_check['id'] = 0;
 }
 
 

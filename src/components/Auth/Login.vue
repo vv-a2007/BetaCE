@@ -1,18 +1,26 @@
 <template>
-<div>
-    <b-nav-item>
-      <b-btn v-b-modal.loginModal size="sm" class="my-2 my-sm-0" variant="primary"  >Login</b-btn>
-    </b-nav-item>
-    <!-- Modal Component -->
-    <b-modal id="loginModal"
+ <div>
+ <b-nav-item>
+        <b-btn v-b-modal.loginModal size="sm" class="my-2 my-sm-0" variant="primary"  >Login</b-btn>
+        </b-nav-item>
+        <!-- Modal Component -->
+    <b-modal
+             id="loginModal"
              ref="modal"
              title="Login with e-mail"
              @ok="handleOk"
              @shown="clearName"
+             @change="true"
              centered
              ok-only
              :ok-disabled="this.$v.$invalid"
              >
+
+        <template slot="modal-ok"
+                  :loading="loading"
+                  :disabled="this.$v.$invalid || loading"
+        >Login</template>
+
         <form @submit.stop.prevent="handleSubmit">
             <b-row>
                 <b-form-input type="text"
@@ -41,7 +49,7 @@
             </b-row>
         </form>
     </b-modal>
-</div>
+ </div>
 </template>
 
 <script>
@@ -66,8 +74,12 @@
                 minLength: minLength(8)
             }
         },
+        computed : {
+            loading () {
+                return this.$store.getters.loading
+            }
+        },
         methods: {
-
             clearName () {
                 this.e_mail = '';
                 this.passw = ''
@@ -80,12 +92,17 @@
                 }
             },
             handleSubmit () {
-
-                this.clearName();
-                this.$refs.modal.hide()
+                let user = {
+                    email:this.e_mail,
+                    passw:this.passw
+                };
+                this.$store.dispatch('loginUser',user)
+                    .then (() => {this.$refs.modal.hide(); this.$router.push('/')})
+                    .catch((error) => {this.$refs.modal.hide(); return error})
             }
         }
     }
+
 </script>
 
 <style scoped>
