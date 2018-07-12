@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import router from './router/router'
-import store from '../src/store'
+import store from './store'
 import App from './App.vue'
 import Vuex from 'vuex'
 

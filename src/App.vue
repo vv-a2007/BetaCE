@@ -28,13 +28,12 @@
             <registration-modal v-if="!isUserLogin" ></registration-modal>
           </b-nav-form>
 
-          <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" type="dark" >
 
-          <b-nav-item-dropdown v-if="isUserLogin" text="User" right variant="primary" type="dark">
+            <b-nav-item-dropdown v-if="isUserLogin" text="User" right variant="primary" type="dark">
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#" >Signout</b-dropdown-item>
           </b-nav-item-dropdown>
-          </b-btn>
+
 
           <b-navbar-nav v-if="isUserLogin" >
            <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" @click="logOut">LogOut</b-btn>
@@ -45,12 +44,12 @@
             <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
           </b-nav-form>
 
-          <b-btn  size="sm" class="my-2 my-sm-0" variant="primary" type="dark" >
+
           <b-nav-item-dropdown text="Lang" right>
             <b-dropdown-item href="#">EN</b-dropdown-item>
             <b-dropdown-item href="#">RU</b-dropdown-item>
           </b-nav-item-dropdown>
-          </b-btn>
+
 
 
 
