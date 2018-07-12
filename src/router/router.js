@@ -5,6 +5,7 @@ import Vuelidate from 'vuelidate'
 import AuthGuard from './auth-guard'
 import homePage from '../components/Home.vue'
 import shoppingPage from '../components/Shopping.vue'
+import newAd from '../components/newAd.vue'
 import loginPage from '../components/Auth/Login.vue'
 import registrationPage from '../components/Auth/Registration.vue'
 
@@ -24,7 +25,11 @@ export default new VueRouter ({
             component: shoppingPage,
             beforeEnter: AuthGuard
         },
-
+        {
+            path:'/newad',
+            component: newAd,
+            beforeEnter: AuthGuard
+        }
 
     ],
     mode: 'history'

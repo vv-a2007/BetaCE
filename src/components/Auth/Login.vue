@@ -95,7 +95,7 @@
                     passw:this.passw
                 };
                 this.$store.dispatch('loginUser',user)
-                    .then (() => {this.$refs.modal.hide(); this.$router.push('/')})
+                    .then (() => {this.$refs.modal.hide(); this.$router.push("/")})
                     .catch((error) => {return error})
             }
         }
