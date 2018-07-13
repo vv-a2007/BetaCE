@@ -114,7 +114,8 @@ export default {
     },
     components:{'login-modal':loginPage,
                 'registration-modal':regPage
-               }
+               },
+
 }
 </script>
 

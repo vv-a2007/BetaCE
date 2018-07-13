@@ -1,4 +1,6 @@
+import '@babel/polyfill'
 import Vue from 'vue'
+import './plugins/vuetify'
 import VueRouter from 'vue-router'
 import router from './router/router'
 import store from './store'
@@ -7,6 +9,7 @@ import Vuex from 'vuex'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Vuetify from 'vuetify'
 
 import * as fb from 'firebase'
 
@@ -20,6 +23,7 @@ Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
+Vue.use(Vuetify);
 
 
 /* eslint-disable no-new */
@@ -41,7 +45,9 @@ new Vue({
             if (user){
                 this.$store.dispatch('autoLoginUser',user)
             }
-        })
+        });
+
+        this.$store.dispatch('fetchAds')
 
     }
 
